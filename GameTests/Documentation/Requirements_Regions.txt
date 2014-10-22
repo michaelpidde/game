@@ -1,0 +1,3 @@
+﻿A region is a collection of maps connected by entry points. Regions may or may not have direct impact on gameplay, butl they will be named and used to facilitate easier world creation via the Map Editor. 
+
+Graphically, a region may have a distinctive look and feel, such as forested, desert, island, etc. 

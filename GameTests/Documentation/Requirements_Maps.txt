@@ -1,0 +1,39 @@
+﻿Map tile size: 32x32px
+Map dimensions: Any odd numbers (character will always be in middle screen, map will move based on player direction)
+
+Map data will be saved in base-64 encoded JSON files. This type is useful for multiple reasons:
+1) It is easy to manage via existing .NET libraries.
+2) It allows extensibility to branch out to web capability later on.
+3) It allows standardized formatting for simple updating by hand if encoding is disabled.
+
+The map is a multi-layer concept. The first layer is simply the background graphics to display. They are essentially meaningless to the program and will only hold meaning to the user. This layer includes ground tiles (grass, water, etc) and non-interactive objects (trees, buildings, etc). 
+
+The first map layer is an array of arrays of integers corresponding to tilemap quadrant:
+[
+	[1,9,1,1,1,1,1,1,1,1],
+	[1,3,3,3,3,3,3,3,3,1],
+	[1,3,4,4,2,2,4,4,3,1],
+	[1,3,6,6,8,8,6,6,3,1],
+	[1,3,3,3,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,9,1]
+]
+
+The second layer is the interactive layer. It is similarly an array of arrays, but the values therein will be associated to configured interaction objects. For example, in the layer definition below, 0 is a non-interaction (the player can walk on that block and nothing happens), 1 is a hard collision (the player cannot walk on the block), 4 is an item which is a hard collision (the user cannot walk on it) but can interact with, and 5 is a doorway (when the user collides with the tile, a transport to another map will occur). 
+
+[
+	[1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,4,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,5],
+	[1,0,0,0,0,0,0,0,0,5],
+	[1,0,0,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1]
+]
+
+The third layer is the character layer which includes both non-playable characters and the user player. It will be defined the same as the second layer but with configured player objects. This layer will also define the player starting point for the map.
+
+All map files should have:
+* A unique ID
+* A human-readable name
+* An "empty block" background color (if a map is smaller than the viewport, fill the outlying tiles with this color)
+
+Each distinctive map built via the Map Editor can be as simple as a room in a house or as complex as a large forest maze.
