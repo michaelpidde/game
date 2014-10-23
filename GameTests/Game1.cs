@@ -76,6 +76,11 @@ namespace GameTests {
             // TODO: Unload any non ContentManager content here
         }
 
+        protected bool CheckCollision() {
+            // Add collision logic - check mapArea.collisionArray
+            return true;
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -90,28 +95,28 @@ namespace GameTests {
             if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.South);
                 delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                if(delayedMilliseconds > MOVE_DELAY) {
+                if(delayedMilliseconds > MOVE_DELAY && CheckCollision()) {
                     position = new Vector2(position.X, position.Y + TILESIZE);
                     delayedMilliseconds = 0;
                 }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.East);
                 delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                if(delayedMilliseconds > MOVE_DELAY) {
+                if (delayedMilliseconds > MOVE_DELAY && CheckCollision()) {
                     position = new Vector2(position.X + TILESIZE, position.Y);
                     delayedMilliseconds = 0;
                 }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.West);
                 delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                if(delayedMilliseconds > MOVE_DELAY) {
+                if(delayedMilliseconds > MOVE_DELAY && CheckCollision()) {
                     position = new Vector2(position.X - TILESIZE, position.Y);
                     delayedMilliseconds = 0;
                 }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.North);
                 delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                if(delayedMilliseconds > MOVE_DELAY) {
+                if(delayedMilliseconds > MOVE_DELAY && CheckCollision()) {
                     position = new Vector2(position.X, position.Y - TILESIZE);
                     delayedMilliseconds = 0;
                 }
@@ -144,6 +149,8 @@ namespace GameTests {
             string stats = "Map: " + mapArea.mapData.title;
             stats += "\nHeight: " + mapArea.height;
             stats += "\nWidth: " + mapArea.width;
+            stats += "\nPosition: " + position.ToString();
+            stats += "\nTile: " + (position.X / TILESIZE).ToString() + "," + (position.Y / TILESIZE).ToString();
             spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);
             spriteBatch.End();
 

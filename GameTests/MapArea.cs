@@ -13,15 +13,17 @@ namespace GameTests {
         public int height { get; set; }
         public int width { get; set; }
         public MapData mapData { get; set; }
+        public bool[][] collisionArray { get; set; }
 
         public MapArea(int tileSize, int id) {
             this.tileSize = tileSize;
-            this.mapData = loadMap(id);
+            this.mapData = LoadMap(id);
             this.height = mapData.map.Length - 1;
             this.width = mapData.map[0].Length - 1;
+            this.collisionArray = GetCollisionArray();
         }
 
-        private MapData loadMap(int id) {
+        private MapData LoadMap(int id) {
             //string base64;
             string unencoded;
             using(StreamReader reader = new StreamReader("Content/Maps/" + id.ToString() + ".map")) {
@@ -30,6 +32,22 @@ namespace GameTests {
             }
             //string unencoded = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
             return JsonConvert.DeserializeObject<MapData>(unencoded);
+        }
+
+        public bool[][] GetCollisionArray() {
+            int[][] collisionMap = this.mapData.collision;
+            bool[][] collisionArray = new bool[collisionMap.Length][];
+            for (int y = 0; y < collisionMap.Length; y++) {
+                collisionArray[y] = new bool[collisionMap[0].Length];
+                for (int x = 0; x < collisionMap[0].Length; x++) {
+                    if (collisionMap[y][x] == -1) {
+                        collisionArray[y][x] = false;
+                    } else {
+                        collisionArray[y][x] = true;
+                    }
+                }
+            }
+            return collisionArray;
         }
 
         public void DrawBackground(SpriteBatch spriteBatch, Texture2D textureSheet) {
