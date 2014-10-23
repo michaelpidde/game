@@ -16,21 +16,17 @@ namespace GameTests {
         const int TILESIZE = 32;
         const int X_TILES = 11;
         const int Y_TILES = 11;
+        const int MOVE_DELAY = 300;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private Texture2D textureSheet;
         private SpriteFont font;
         private AnimatedSprite sprite;
-        private int spriteDirection;
         private MapArea mapArea;
         Vector2 center;
-
-        private enum SpriteDirection {
-            South = 0,
-            East = 1,
-            West = 2,
-            North = 3
-        }
+        Vector2 position;
+        int delayedMilliseconds = 0;
 
         public Game1()
             : base() {
@@ -51,6 +47,7 @@ namespace GameTests {
             graphics.ApplyChanges();
 
             this.center = new Vector2((X_TILES / 2) * TILESIZE, (Y_TILES / 2) * TILESIZE);
+            this.position = center;
 
             base.Initialize();
         }
@@ -65,8 +62,7 @@ namespace GameTests {
             textureSheet = this.Content.Load<Texture2D>("texturemap_large");
             font = this.Content.Load<SpriteFont>("font");
             Texture2D texture = this.Content.Load<Texture2D>("character_move");
-            spriteDirection = (int)SpriteDirection.South;
-            sprite = new AnimatedSprite(texture, 1, 4, TILESIZE, spriteDirection);
+            sprite = new AnimatedSprite(texture, 1, 4, TILESIZE, Enums.SpriteDirection.South);
             
             // Testing maps...
             mapArea = new MapArea(TILESIZE, 1);
@@ -92,17 +88,33 @@ namespace GameTests {
             }
 
             if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
-                spriteDirection = (int)SpriteDirection.South;
-                sprite.Update(gameTime, spriteDirection);
+                sprite.Update(gameTime, Enums.SpriteDirection.South);
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+                if(delayedMilliseconds > MOVE_DELAY) {
+                    position = new Vector2(position.X, position.Y + TILESIZE);
+                    delayedMilliseconds = 0;
+                }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
-                spriteDirection = (int)SpriteDirection.East;
-                sprite.Update(gameTime, spriteDirection);
+                sprite.Update(gameTime, Enums.SpriteDirection.East);
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+                if(delayedMilliseconds > MOVE_DELAY) {
+                    position = new Vector2(position.X + TILESIZE, position.Y);
+                    delayedMilliseconds = 0;
+                }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
-                spriteDirection = (int)SpriteDirection.West;
-                sprite.Update(gameTime, spriteDirection);
+                sprite.Update(gameTime, Enums.SpriteDirection.West);
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+                if(delayedMilliseconds > MOVE_DELAY) {
+                    position = new Vector2(position.X - TILESIZE, position.Y);
+                    delayedMilliseconds = 0;
+                }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
-                spriteDirection = (int)SpriteDirection.North;
-                sprite.Update(gameTime, spriteDirection);
+                sprite.Update(gameTime, Enums.SpriteDirection.North);
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+                if(delayedMilliseconds > MOVE_DELAY) {
+                    position = new Vector2(position.X, position.Y - TILESIZE);
+                    delayedMilliseconds = 0;
+                }
             } else {
                 // Set sprite to idle state
                 sprite.setIdleState();
@@ -124,14 +136,16 @@ namespace GameTests {
             // Draw collision layer.
             this.mapArea.DrawCollision(spriteBatch, textureSheet);
 
+            // Draw player on screen.
+            sprite.Draw(spriteBatch, position);
+
+            // Draw some debug output.
             spriteBatch.Begin();
             string stats = "Map: " + mapArea.mapData.title;
             stats += "\nHeight: " + mapArea.height;
             stats += "\nWidth: " + mapArea.width;
             spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);
             spriteBatch.End();
-
-            sprite.Draw(spriteBatch, center);
 
             base.Draw(gameTime);
         }

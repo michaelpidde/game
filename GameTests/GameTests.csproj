@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="IEnums.cs" />
     <Compile Include="MapArea.cs" />
     <Compile Include="MapData.cs" />
     <Compile Include="Program.cs" />

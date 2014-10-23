@@ -14,26 +14,26 @@ namespace GameTests {
         private int currentFrame;
         private int totalFrames;
         private int timeSinceLastFrame;
-        private int moveSpeed;
-        private int spriteDirection;
+        private int animateSpeed;
+        public Enums.SpriteDirection spriteDirection { get; set; }
 
-        public AnimatedSprite(Texture2D texture, int rows, int columns, int tileSize, int spriteDirection) {
+        public AnimatedSprite(Texture2D texture, int rows, int columns, int tileSize, Enums.SpriteDirection spriteDirection) {
             this.texture = texture;
             this.rows = rows;
             this.columns = columns;
             this.tileSize = tileSize;
             this.spriteDirection = spriteDirection;
+
             this.currentFrame = 0;
             this.totalFrames = rows * columns;
             this.timeSinceLastFrame = 0;
-            this.moveSpeed = 2;
-
+            this.animateSpeed = 2;
         }
 
-        public void Update(GameTime time, int spriteDirection) {
+        public void Update(GameTime time, Enums.SpriteDirection spriteDirection) {
             this.spriteDirection = spriteDirection;
             timeSinceLastFrame += time.ElapsedGameTime.Milliseconds;
-            if(timeSinceLastFrame > moveSpeed*100) {
+            if(timeSinceLastFrame > animateSpeed * 100) {
                 timeSinceLastFrame = 0;
                 currentFrame++;
                 if(currentFrame == totalFrames) {
@@ -45,7 +45,7 @@ namespace GameTests {
         public void Draw(SpriteBatch spriteBatch, Vector2 location) {
             int width = texture.Width / columns;
             int height = tileSize * rows;
-            int row = spriteDirection;
+            int row = (int)spriteDirection;
             int column = currentFrame % columns;
 
             Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
