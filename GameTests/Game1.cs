@@ -14,8 +14,8 @@ namespace GameTests {
     /// </summary>
     public class Game1 : Game {
         const int TILESIZE = 32;
-        const int X_TILES = 10;
-        const int Y_TILES = 10;
+        const int X_TILES = 11;
+        const int Y_TILES = 11;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private Texture2D textureSheet;
@@ -23,6 +23,7 @@ namespace GameTests {
         private AnimatedSprite sprite;
         private int spriteDirection;
         private MapArea mapArea;
+        Vector2 center;
 
         private enum SpriteDirection {
             South = 0,
@@ -49,6 +50,8 @@ namespace GameTests {
             graphics.PreferredBackBufferWidth = TILESIZE * X_TILES;
             graphics.ApplyChanges();
 
+            this.center = new Vector2((X_TILES / 2) * TILESIZE, (Y_TILES / 2) * TILESIZE);
+
             base.Initialize();
         }
 
@@ -59,7 +62,7 @@ namespace GameTests {
         protected override void LoadContent() {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            textureSheet = this.Content.Load<Texture2D>("texturemap");
+            textureSheet = this.Content.Load<Texture2D>("texturemap_large");
             font = this.Content.Load<SpriteFont>("font");
             Texture2D texture = this.Content.Load<Texture2D>("character_move");
             spriteDirection = (int)SpriteDirection.South;
@@ -115,39 +118,20 @@ namespace GameTests {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin();
-
             // Draw first map layer.
-            int sheetWidth = textureSheet.Width / TILESIZE;
-            int tilePosition = 0;
-            int tileY = 0;
-            int tileX = 0;
-            double tilePositionPrecision = 0;
+            this.mapArea.DrawBackground(spriteBatch, textureSheet);
 
-            for(int y = 0; y <= mapArea.height; y++) {
-                for(int x = 0; x <= mapArea.width; x++) {
-                    tilePosition = mapArea.mapData.map[y][x];
-                    tilePositionPrecision = (double)tilePosition / (double)sheetWidth;
-                    tileY = (int)tilePositionPrecision;
-                    tileX = (int)((tilePositionPrecision - (int)tilePositionPrecision) * sheetWidth);
-                    
-                    spriteBatch.Draw(
-                        textureSheet, 
-                        new Rectangle(x * TILESIZE, y * TILESIZE, TILESIZE, TILESIZE), 
-                        new Rectangle(tileX * TILESIZE, tileY * TILESIZE, TILESIZE, TILESIZE),
-                        Color.White
-                    );
-                }
-            }
+            // Draw collision layer.
+            this.mapArea.DrawCollision(spriteBatch, textureSheet);
 
+            spriteBatch.Begin();
             string stats = "Map: " + mapArea.mapData.title;
             stats += "\nHeight: " + mapArea.height;
             stats += "\nWidth: " + mapArea.width;
             spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);
-
             spriteBatch.End();
 
-            sprite.Draw(spriteBatch, new Vector2(150,150));
+            sprite.Draw(spriteBatch, center);
 
             base.Draw(gameTime);
         }

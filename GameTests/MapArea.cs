@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GameTests {
     class MapArea {
@@ -28,6 +30,42 @@ namespace GameTests {
             }
             //string unencoded = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
             return JsonConvert.DeserializeObject<MapData>(unencoded);
+        }
+
+        public void DrawBackground(SpriteBatch spriteBatch, Texture2D textureSheet) {
+            Draw(this.mapData.map, spriteBatch, textureSheet);
+        }
+
+        public void DrawCollision(SpriteBatch spriteBatch, Texture2D textureSheet) {
+            Draw(this.mapData.collision, spriteBatch, textureSheet);
+        }
+
+        private void Draw(int[][] map, SpriteBatch spriteBatch, Texture2D textureSheet) {
+            int sheetWidth = textureSheet.Width / this.tileSize;
+            int tilePosition = 0;
+            int tileY = 0;
+            int tileX = 0;
+            double tilePositionPrecision = 0;
+
+            spriteBatch.Begin();
+            for(int y = 0; y <= this.height; y++) {
+                for(int x = 0; x <= this.width; x++) {
+                    tilePosition = map[y][x];
+                    if(tilePosition > -1) {
+                        tilePositionPrecision = (double)tilePosition / (double)sheetWidth;
+                        tileY = (int)tilePositionPrecision;
+                        tileX = (int)((tilePositionPrecision - (int)tilePositionPrecision) * sheetWidth);
+
+                        spriteBatch.Draw(
+                            textureSheet,
+                            new Rectangle(x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize),
+                            new Rectangle(tileX * this.tileSize, tileY * this.tileSize, this.tileSize, this.tileSize),
+                            Color.White
+                        );
+                    }
+                }
+            }
+            spriteBatch.End();
         }
     }
 }
