@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
-namespace GameTests {
+namespace GameTests.DataModel {
     /// <summary>
     /// This is a class representation of the .map JSON data files.
     /// This is a member of the MapArea composite object and probably
@@ -14,7 +15,10 @@ namespace GameTests {
         public String title { get; set; }
         public String id { get; set; }
         public int[][] map { get; set; }
-        public int[] start { get; set; }
+        public int[][] map2 { get; set; }
         public int[][] collision { get; set; }
+        public Vector2 start { get; set; }
+        public int direction { get; set; }
+        public Door[] doors { get; set; }
     }
 }

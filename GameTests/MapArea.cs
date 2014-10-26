@@ -6,14 +6,16 @@ using System.Text;
 using Newtonsoft.Json;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-namespace GameTests {
+namespace GameTests.DataModel {
     class MapArea {
         public int tileSize { get; set; }
         public int height { get; set; }
         public int width { get; set; }
         public MapData mapData { get; set; }
         public bool[][] collisionArray { get; set; }
+        public Door[] doors { get; set; }
 
         public MapArea(int tileSize, int id) {
             this.tileSize = tileSize;
@@ -30,8 +32,32 @@ namespace GameTests {
                 //base64 = reader.ReadToEnd();
                 unencoded = reader.ReadToEnd();
             }
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Converters.Add(new Vector2Convertor());
+
             //string unencoded = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-            return JsonConvert.DeserializeObject<MapData>(unencoded);
+            return JsonConvert.DeserializeObject<MapData>(unencoded, settings);
+        }
+
+        public bool IsCollision(Vector2 currentPosition) {
+            currentPosition = Fn.UnscaleVector(currentPosition);
+            Vector2 nextPosition = currentPosition;
+            if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
+                nextPosition.Y++;
+            } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
+                nextPosition.X++;
+            } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
+                nextPosition.X--;
+            } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
+                nextPosition.Y--;
+            }
+            if(nextPosition.Y >= this.collisionArray.Length || nextPosition.Y < 0 ||
+                nextPosition.X >= this.collisionArray[0].Length || nextPosition.X < 0) {
+                // Out of bounds - don't allow to move out of map area.
+                return true;
+            } else {
+                return this.collisionArray[(int)nextPosition.Y][(int)nextPosition.X];
+            }
         }
 
         public bool[][] GetCollisionArray() {
@@ -52,6 +78,10 @@ namespace GameTests {
 
         public void DrawBackground(SpriteBatch spriteBatch, Texture2D textureSheet) {
             Draw(this.mapData.map, spriteBatch, textureSheet);
+        }
+
+        public void DrawSecond(SpriteBatch spriteBatch, Texture2D textureSheet) {
+            Draw(this.mapData.map2, spriteBatch, textureSheet);
         }
 
         public void DrawCollision(SpriteBatch spriteBatch, Texture2D textureSheet) {

@@ -1,0 +1,5 @@
+﻿Game tiles are currently 32x32px. Where possible, vectors in game should be tile-based, not pixel-based.
+For example, {X:4, Y:6}, not {X:160, Y:224}. 
+This is done in case tile size is increased later on for higher resolution graphics. 
+Convert vectors when used based on tile size.
+This is not possible in some areas where interpolation will happen, such as player movement.
