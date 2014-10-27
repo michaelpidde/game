@@ -15,20 +15,23 @@ namespace GameTests.DataModel {
         public int width { get; set; }
         public MapData mapData { get; set; }
         public bool[][] collisionArray { get; set; }
-        public Door[] doors { get; set; }
+        public int[][] doorArray { get; set; }
+        private int mapId = 1;
+        private bool reloadMap = false;
 
-        public MapArea(int tileSize, int id) {
-            this.tileSize = tileSize;
-            this.mapData = LoadMap(id);
-            this.height = mapData.map.Length - 1;
-            this.width = mapData.map[0].Length - 1;
-            this.collisionArray = GetCollisionArray();
+        public bool getReloadMap() {
+            return this.reloadMap;
         }
 
-        private MapData LoadMap(int id) {
+        public MapArea(int tileSize) {
+            this.tileSize = tileSize;
+            ReloadMap();
+        }
+
+        private MapData LoadMap() {
             //string base64;
             string unencoded;
-            using(StreamReader reader = new StreamReader("Content/Maps/" + id.ToString() + ".map")) {
+            using(StreamReader reader = new StreamReader("Content/Maps/" + this.mapId.ToString() + ".map")) {
                 //base64 = reader.ReadToEnd();
                 unencoded = reader.ReadToEnd();
             }
@@ -39,7 +42,16 @@ namespace GameTests.DataModel {
             return JsonConvert.DeserializeObject<MapData>(unencoded, settings);
         }
 
-        public bool IsCollision(Vector2 currentPosition) {
+        public void ReloadMap() {
+            this.mapData = LoadMap();
+            this.height = mapData.map.Length - 1;
+            this.width = mapData.map[0].Length - 1;
+            this.collisionArray = GetCollisionArray();
+            this.doorArray = GetDoorArray();
+            this.reloadMap = false;
+        }
+
+        public Vector2 GetNextPosition(Vector2 currentPosition) {
             currentPosition = Fn.UnscaleVector(currentPosition);
             Vector2 nextPosition = currentPosition;
             if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
@@ -51,6 +63,33 @@ namespace GameTests.DataModel {
             } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
                 nextPosition.Y--;
             }
+            return nextPosition;
+        }
+
+        public bool DoorAction(Vector2 currentPosition, Enums.SpriteDirection spriteDirection) {
+            currentPosition = Fn.UnscaleVector(currentPosition);
+            Door door = this.mapData.doors[
+                doorArray[(int)currentPosition.Y][(int)currentPosition.X]    
+            ];
+            if((int)spriteDirection == door.direction) {
+                this.mapId = door.loadMapId;
+                this.reloadMap = true;
+            }
+            return true;
+        }
+
+        public bool IsDoor(Vector2 currentPosition) {
+            currentPosition = Fn.UnscaleVector(currentPosition);
+            if(doorArray[(int)currentPosition.Y][(int)currentPosition.X] > -1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public bool IsCollision(Vector2 currentPosition) {
+            Vector2 nextPosition = GetNextPosition(currentPosition);
+            
             if(nextPosition.Y >= this.collisionArray.Length || nextPosition.Y < 0 ||
                 nextPosition.X >= this.collisionArray[0].Length || nextPosition.X < 0) {
                 // Out of bounds - don't allow to move out of map area.
@@ -60,7 +99,7 @@ namespace GameTests.DataModel {
             }
         }
 
-        public bool[][] GetCollisionArray() {
+        private bool[][] GetCollisionArray() {
             int[][] collisionMap = this.mapData.collision;
             bool[][] collisionArray = new bool[collisionMap.Length][];
             for (int y = 0; y < collisionMap.Length; y++) {
@@ -74,6 +113,27 @@ namespace GameTests.DataModel {
                 }
             }
             return collisionArray;
+        }
+
+        private int[][] GetDoorArray() {
+            Door[] doorMap = this.mapData.doors;
+            int[][] doorArray = GetEmptyMapArray();
+            for(int door = 0; door < doorMap.Length; door++) {
+                doorArray[(int)doorMap[door].position.Y][(int)doorMap[door].position.X] = door;
+            }
+            return doorArray;
+        }
+
+        public int[][] GetEmptyMapArray() {
+            int[][] map = this.mapData.map;
+            int[][] emptyArray = new int[map.Length][];
+            for(int y = 0; y < map.Length; y++) {
+                emptyArray[y] = new int[map[0].Length];
+                for(int x = 0; x < map[0].Length; x++) {
+                    emptyArray[y][x] = -1;
+                }
+            }
+            return emptyArray;
         }
 
         public void DrawBackground(SpriteBatch spriteBatch, Texture2D textureSheet) {
@@ -114,6 +174,19 @@ namespace GameTests.DataModel {
                 }
             }
             spriteBatch.End();
+        }
+
+        public string WriteDebug() {
+            string debug = "\nDoorArray: [";
+            for(int y = 0; y < doorArray.Length; y++) {
+                debug += "\n[";
+                for(int x = 0; x < doorArray[0].Length; x++) {
+                    debug += doorArray[y][x].ToString() + ",";
+                }
+                debug += "]";
+            }
+            debug += "\n]";
+            return debug;
         }
     }
 }

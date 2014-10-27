@@ -47,7 +47,7 @@ namespace GameTests {
             graphics.ApplyChanges();
 
             // Load initial map.
-            mapArea = new MapArea(Fn.TILESIZE, 2);
+            mapArea = new MapArea(Fn.TILESIZE);
 
             base.Initialize();
         }
@@ -84,7 +84,11 @@ namespace GameTests {
                 Exit();
             }
 
-            player.Update(gameTime, mapArea.IsCollision);
+            if(mapArea.getReloadMap()) {
+                mapArea.ReloadMap();
+            }
+
+            player.Update(gameTime, mapArea.IsCollision, mapArea.IsDoor, mapArea.DoorAction);
 
             base.Update(gameTime);
         }
@@ -115,6 +119,7 @@ namespace GameTests {
                 stats += "\nHeight: " + mapArea.height;
                 stats += "\nWidth: " + mapArea.width;
                 stats += player.WriteDebug();
+                stats += mapArea.WriteDebug();
                 spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);
                 spriteBatch.End();
             }
