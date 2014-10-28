@@ -18,6 +18,11 @@ namespace GameTests {
             this.sprite = new AnimatedSprite(texture, rows, columns, spriteDirection, position, animateSpeed, moveTime);
         }
 
+        public void ResetSprite(Vector2 position, Enums.SpriteDirection direction) {
+            this.sprite.currentPosition = position;
+            this.sprite.spriteDirection = direction;
+        }
+
         public void Update(GameTime gameTime, Func<Vector2, bool> IsCollision, Func<Vector2, bool> IsDoor, 
             Func<Vector2, Enums.SpriteDirection, bool> DoorAction) {
 

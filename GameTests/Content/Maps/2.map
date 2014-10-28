@@ -27,8 +27,8 @@
 	"doors": [
 		{
 			"position": {
-				"X": 6,
-				"Y": 6
+				"X": 2,
+				"Y": 3
 			},
 			"loadMapId": 1,
 			"direction": 0

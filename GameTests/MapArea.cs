@@ -17,10 +17,19 @@ namespace GameTests.DataModel {
         public bool[][] collisionArray { get; set; }
         public int[][] doorArray { get; set; }
         private int mapId = 1;
-        private bool reloadMap = false;
+        private bool reloadingMap = false;
+        private bool doCallback = false;
 
-        public bool getReloadMap() {
-            return this.reloadMap;
+        public bool ReloadingMap() {
+            return this.reloadingMap;
+        }
+
+        public bool Callback() {
+            return this.doCallback;
+        }
+
+        public void VoidCallback() {
+            this.doCallback = false;
         }
 
         public MapArea(int tileSize) {
@@ -48,7 +57,8 @@ namespace GameTests.DataModel {
             this.width = mapData.map[0].Length - 1;
             this.collisionArray = GetCollisionArray();
             this.doorArray = GetDoorArray();
-            this.reloadMap = false;
+            this.reloadingMap = false;
+            this.doCallback = true;
         }
 
         public Vector2 GetNextPosition(Vector2 currentPosition) {
@@ -73,7 +83,8 @@ namespace GameTests.DataModel {
             ];
             if((int)spriteDirection == door.direction) {
                 this.mapId = door.loadMapId;
-                this.reloadMap = true;
+                this.reloadingMap = true;
+                ReloadMap();
             }
             return true;
         }

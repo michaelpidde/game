@@ -26,7 +26,7 @@ namespace GameTests {
         private SpriteFont font;
         private Player player;
         private MapArea mapArea;
-        bool showDebug = true;
+        bool showDebug = false;
 
         public Game1()
             : base() {
@@ -84,11 +84,15 @@ namespace GameTests {
                 Exit();
             }
 
-            if(mapArea.getReloadMap()) {
-                mapArea.ReloadMap();
+            if(!mapArea.ReloadingMap()) {
+                if(mapArea.Callback()) {
+                    // This condition will happen after a new map is loaded.
+                    // We'll need to reset the player position to the door position.
+                    player.ResetSprite(Fn.ScaleVector(mapArea.mapData.start), Enums.GetDirectionKey(mapArea.mapData.direction));
+                    mapArea.VoidCallback();
+                }
+                player.Update(gameTime, mapArea.IsCollision, mapArea.IsDoor, mapArea.DoorAction);
             }
-
-            player.Update(gameTime, mapArea.IsCollision, mapArea.IsDoor, mapArea.DoorAction);
 
             base.Update(gameTime);
         }
@@ -100,28 +104,30 @@ namespace GameTests {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
 
-            // Draw first map layer.
-            mapArea.DrawBackground(spriteBatch, textureSheet);
+            if(!mapArea.ReloadingMap()) {
+                // Draw first map layer.
+                mapArea.DrawBackground(spriteBatch, textureSheet);
 
-            // Draw second map layer.
-            mapArea.DrawSecond(spriteBatch, textureSheet);
+                // Draw second map layer.
+                mapArea.DrawSecond(spriteBatch, textureSheet);
 
-            // Draw collision layer.
-            mapArea.DrawCollision(spriteBatch, textureSheet);
+                // Draw collision layer.
+                mapArea.DrawCollision(spriteBatch, textureSheet);
 
-            // Draw player on screen.
-            player.Draw(spriteBatch);
+                // Draw player on screen.
+                player.Draw(spriteBatch);
 
-            if(showDebug) {
-                // Draw some debug output.
-                spriteBatch.Begin();
-                string stats = "Map: " + mapArea.mapData.title;
-                stats += "\nHeight: " + mapArea.height;
-                stats += "\nWidth: " + mapArea.width;
-                stats += player.WriteDebug();
-                stats += mapArea.WriteDebug();
-                spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);
-                spriteBatch.End();
+                if(showDebug) {
+                    // Draw some debug output.
+                    spriteBatch.Begin();
+                    string stats = "Map: " + mapArea.mapData.title;
+                    stats += "\nHeight: " + mapArea.height;
+                    stats += "\nWidth: " + mapArea.width;
+                    stats += player.WriteDebug();
+                    stats += mapArea.WriteDebug();
+                    spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);
+                    spriteBatch.End();
+                }
             }
 
             base.Draw(gameTime);
