@@ -21,6 +21,7 @@ namespace GameTests {
         public void ResetSprite(Vector2 position, Enums.SpriteDirection direction) {
             this.sprite.currentPosition = position;
             this.sprite.spriteDirection = direction;
+            delayedMilliseconds = 0;
         }
 
         public void Update(GameTime gameTime, Func<Vector2, bool> IsCollision, Func<Vector2, bool> IsDoor, 
@@ -28,61 +29,65 @@ namespace GameTests {
 
             if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.South);
-                if(IsDoor(sprite.currentPosition)) {
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                     DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                } else {
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        /*
-                        if(sprite.currentMoveTime < sprite.moveTime) {
-                            // Update movement time.
-                            sprite.currentMoveTime += gameTime.ElapsedGameTime.Milliseconds;
+                }
+                
+                if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
+                    /*
+                    if(sprite.currentMoveTime < sprite.moveTime) {
+                        // Update movement time.
+                        sprite.currentMoveTime += gameTime.ElapsedGameTime.Milliseconds;
                         
-                            // Do linear interpolation.
-                            float lerpAmount = (float)(sprite.currentMoveTime / sprite.moveTime);
-                            position = Vector2.Lerp(sprite.lastPosition, new Vector2(position.X, position.Y + TILESIZE), lerpAmount);
-                        } else {
-                            delayedMilliseconds = 0;
-                            sprite.currentMoveTime = 0;
-                            sprite.lastPosition = position;
-                        }
-                         */
-                        sprite.currentPosition = new Vector2(sprite.currentPosition.X, sprite.currentPosition.Y + Fn.TILESIZE);
+                        // Do linear interpolation.
+                        float lerpAmount = (float)(sprite.currentMoveTime / sprite.moveTime);
+                        position = Vector2.Lerp(sprite.lastPosition, new Vector2(position.X, position.Y + TILESIZE), lerpAmount);
+                    } else {
                         delayedMilliseconds = 0;
+                        sprite.currentMoveTime = 0;
+                        sprite.lastPosition = position;
                     }
+                        */
+                    sprite.currentPosition = new Vector2(sprite.currentPosition.X, sprite.currentPosition.Y + Fn.TILESIZE);
+                    delayedMilliseconds = 0;
                 }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.East);
-                if(IsDoor(sprite.currentPosition)) {
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                     DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                } else {
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.currentPosition = new Vector2(sprite.currentPosition.X + Fn.TILESIZE, sprite.currentPosition.Y);
-                        delayedMilliseconds = 0;
-                    }
+                }
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
+                    sprite.currentPosition = new Vector2(sprite.currentPosition.X + Fn.TILESIZE, sprite.currentPosition.Y);
+                    delayedMilliseconds = 0;
                 }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.West);
-                if(IsDoor(sprite.currentPosition)) {
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                     DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                } else {
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.currentPosition = new Vector2(sprite.currentPosition.X - Fn.TILESIZE, sprite.currentPosition.Y);
-                        delayedMilliseconds = 0;
-                    }
+                }
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
+                    sprite.currentPosition = new Vector2(sprite.currentPosition.X - Fn.TILESIZE, sprite.currentPosition.Y);
+                    delayedMilliseconds = 0;
                 }
             } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
                 sprite.Update(gameTime, Enums.SpriteDirection.North);
-                if(IsDoor(sprite.currentPosition)) {
+                delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                     DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                } else {
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.currentPosition = new Vector2(sprite.currentPosition.X, sprite.currentPosition.Y - Fn.TILESIZE);
-                        delayedMilliseconds = 0;
-                    }
+                }
+
+                if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
+                    sprite.currentPosition = new Vector2(sprite.currentPosition.X, sprite.currentPosition.Y - Fn.TILESIZE);
+                    delayedMilliseconds = 0;
                 }
             } else {
                 // Set sprite to idle state
