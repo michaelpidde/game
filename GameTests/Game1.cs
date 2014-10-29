@@ -26,7 +26,7 @@ namespace GameTests {
         private SpriteFont font;
         private Player player;
         private MapArea mapArea;
-        bool showDebug = false;
+        bool showDebug = true;
 
         public Game1()
             : base() {

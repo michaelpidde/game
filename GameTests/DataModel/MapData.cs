@@ -21,13 +21,13 @@ namespace GameTests.DataModel {
         public int direction { get; set; }
         public Door[] doors { get; set; }
 
-        public bool HasDoorLink(int doorLinkId) {
-            foreach(Door door in this.doors) {
-                if(door.linkId == doorLinkId) {
-                    return true;
+        public int HasDoorLink(int doorLinkId) {
+            for(int i = 0; i <= doors.Length - 1; i++) {
+                if(doors[i].linkId == doorLinkId) {
+                    return i;
                 }
             }
-            return false;
+            return -1;
         }
     }
 }

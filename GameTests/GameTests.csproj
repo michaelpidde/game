@@ -133,6 +133,9 @@
     <Content Include="Content\Maps\2.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\Maps\3.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Maps\test_backup.map" />
     <Content Include="Content\Maps\1.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

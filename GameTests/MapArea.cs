@@ -35,8 +35,9 @@ namespace GameTests.DataModel {
 
         public Vector2 GetDoorPosition() {
             Vector2 position = this.mapData.start;
-            if(this.mapData.HasDoorLink(this.doorLinkId)) {
-                position = this.mapData.doors[this.doorLinkId].position;
+            int doorId = this.mapData.HasDoorLink(this.doorLinkId);
+            if(doorId > -1) {
+                position = this.mapData.doors[doorId].position;
             }
             return position;
         }
@@ -198,7 +199,8 @@ namespace GameTests.DataModel {
         }
 
         public string WriteDebug() {
-            string debug = "\nDoorArray: [";
+            string debug = "";
+            /* debug += "\nDoorArray: [";
             for(int y = 0; y < doorArray.Length; y++) {
                 debug += "\n[";
                 for(int x = 0; x < doorArray[0].Length; x++) {
@@ -207,6 +209,8 @@ namespace GameTests.DataModel {
                 debug += "]";
             }
             debug += "\n]";
+             */
+            debug += "\nDoorId: " + this.doorLinkId.ToString();
             return debug;
         }
     }
