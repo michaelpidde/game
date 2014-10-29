@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTests", "GameTests\Game
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor.csproj", "{41EAC50A-8C67-4494-AFAE-6068E0668E54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicTests", "LogicTests\LogicTests.csproj", "{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,16 +37,6 @@ Global
 		{41EAC50A-8C67-4494-AFAE-6068E0668E54}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{41EAC50A-8C67-4494-AFAE-6068E0668E54}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{41EAC50A-8C67-4494-AFAE-6068E0668E54}.Release|x86.ActiveCfg = Release|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{BC6B4EA8-A5A1-4CC7-A705-D312F3C0BCAB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,5 +20,14 @@ namespace GameTests.DataModel {
         public Vector2 start { get; set; }
         public int direction { get; set; }
         public Door[] doors { get; set; }
+
+        public bool HasDoorLink(int doorLinkId) {
+            foreach(Door door in this.doors) {
+                if(door.linkId == doorLinkId) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

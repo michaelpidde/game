@@ -88,7 +88,7 @@ namespace GameTests {
                 if(mapArea.Callback()) {
                     // This condition will happen after a new map is loaded.
                     // We'll need to reset the player position to the door position.
-                    player.ResetSprite(Fn.ScaleVector(mapArea.mapData.start), Enums.GetDirectionKey(mapArea.mapData.direction));
+                    player.ResetSprite(Fn.ScaleVector(mapArea.GetDoorPosition()), Enums.GetDirectionKey(mapArea.mapData.direction));
                     mapArea.VoidCallback();
                 }
                 player.Update(gameTime, mapArea.IsCollision, mapArea.IsDoor, mapArea.DoorAction);

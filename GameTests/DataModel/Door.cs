@@ -10,6 +10,7 @@ namespace GameTests.DataModel {
     /// </summary>
     class Door {
         public Vector2 position { get; set; }
+        public int linkId { get; set; }
         public int loadMapId { get; set; }
         public int direction { get; set; }
     }
