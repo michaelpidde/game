@@ -71,21 +71,6 @@ namespace GameTests.DataModel {
             this.doCallback = true;
         }
 
-        public Vector2 GetNextPosition(Vector2 currentPosition) {
-            currentPosition = Fn.UnscaleVector(currentPosition);
-            Vector2 nextPosition = currentPosition;
-            if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
-                nextPosition.Y++;
-            } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
-                nextPosition.X++;
-            } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
-                nextPosition.X--;
-            } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
-                nextPosition.Y--;
-            }
-            return nextPosition;
-        }
-
         public bool DoorAction(Vector2 currentPosition, Enums.SpriteDirection spriteDirection) {
             currentPosition = Fn.UnscaleVector(currentPosition);
             Door door = this.mapData.doors[
@@ -110,7 +95,7 @@ namespace GameTests.DataModel {
         }
 
         public bool IsCollision(Vector2 currentPosition) {
-            Vector2 nextPosition = GetNextPosition(currentPosition);
+            Vector2 nextPosition = Fn.GetNextPosition(currentPosition);
             
             if(nextPosition.Y >= this.collisionArray.Length || nextPosition.Y < 0 ||
                 nextPosition.X >= this.collisionArray[0].Length || nextPosition.X < 0) {

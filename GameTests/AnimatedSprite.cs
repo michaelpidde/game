@@ -12,13 +12,15 @@ namespace GameTests {
         public int rows { get; set; }
         public int columns { get; set; }
         public int moveTime { get; set; }
-        public int currentMoveTime { get; set; }
+        public float currentMoveTime { get; set; }
         public Vector2 lastPosition { get; set; }
         public Vector2 currentPosition { get; set; }
+        public Vector2 endPosition { get; set; }
         private int currentFrame;
         private int totalFrames;
         private int timeSinceLastFrame;
-        private int animateSpeed;
+        public int animateSpeed { get; set; } 
+        public bool moving = false;
         public Enums.SpriteDirection spriteDirection { get; set; }
 
         public AnimatedSprite(Texture2D texture, int rows, int columns, int spriteDirection, Vector2 position, int animateSpeed, int moveTime) {
