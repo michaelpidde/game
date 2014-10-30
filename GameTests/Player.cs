@@ -13,8 +13,8 @@ namespace GameTests {
         private int delayedMilliseconds = 0;
 
         public Player(Texture2D texture, int rows, int columns, int spriteDirection, Vector2 position) {
-            int animateSpeed = 200;
-            int moveTime = 200;
+            int animateSpeed = 150;
+            int moveTime = 300;
             this.sprite = new AnimatedSprite(texture, rows, columns, spriteDirection, position, animateSpeed, moveTime);
         }
 
@@ -40,12 +40,20 @@ namespace GameTests {
                     sprite.currentMoveTime = 0;
                     sprite.currentPosition = sprite.endPosition;
                     sprite.lastPosition = sprite.currentPosition;
+                }
+
+                sprite.Update(gameTime, sprite.spriteDirection);
+
+            } else {
+
+                if(Fn.ArrowKeyDown()) {
+                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
+                } else {
                     delayedMilliseconds = 0;
                 }
-            } else {
+
                 if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.South);
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
 
                     if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                         DoorAction(sprite.currentPosition, sprite.spriteDirection);
@@ -57,7 +65,6 @@ namespace GameTests {
                     }
                 } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.East);
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
 
                     if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                         DoorAction(sprite.currentPosition, sprite.spriteDirection);
@@ -69,7 +76,6 @@ namespace GameTests {
                     }
                 } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.West);
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
 
                     if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                         DoorAction(sprite.currentPosition, sprite.spriteDirection);
@@ -81,7 +87,6 @@ namespace GameTests {
                     }
                 } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.North);
-                    delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
 
                     if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
                         DoorAction(sprite.currentPosition, sprite.spriteDirection);

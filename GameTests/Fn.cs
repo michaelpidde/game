@@ -10,7 +10,7 @@ namespace GameTests {
         public const int TILESIZE = 32;
         public const int X_TILES = 22;
         public const int Y_TILES = 14;
-        public const int MOVE_DELAY = 300;
+        public const int MOVE_DELAY = 150;
 
         public static Vector2 ScaleVector(Vector2 vector) {
             return new Vector2(vector.X * TILESIZE, vector.Y * TILESIZE);
@@ -33,6 +33,19 @@ namespace GameTests {
                 nextPosition.Y--;
             }
             return nextPosition;
+        }
+
+        public static bool ArrowKeyDown() {
+            if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
+                return true;
+            } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
+                return true;
+            } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
+                return true;
+            } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
+                return true;
+            }
+            return false;
         }
     }
 }
