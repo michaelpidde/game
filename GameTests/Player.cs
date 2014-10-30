@@ -26,6 +26,10 @@ namespace GameTests {
             this.sprite.spriteDirection = direction;
         }
 
+        /*
+         * This gets called from the Update function. See commentary to that function
+         * regarding the delegates that are passed in.
+         */
         private void PlayerMove(Func<Vector2, bool> IsCollision, Func<Vector2, bool> IsDoor,
             Func<Vector2, Enums.SpriteDirection, bool> DoorAction) {
 
@@ -39,6 +43,14 @@ namespace GameTests {
             }
         }
 
+        /*
+         * This function is taking three functions from the MapArea as parameters. This is to avoid
+         * directly passing the instance of MapArea into this player object. Instead, we want to 
+         * use a few functions from the MapArea instance that exists elsewhere that can act on the
+         * instance, thus not needing to know exactly where the instance comes from or store a 
+         * reference to it in this object. I'm not sure whether that's a good or a bad thing
+         * in the long run, but I'll figure out and modify as I go.
+         */
         public void Update(GameTime gameTime, Func<Vector2, bool> IsCollision, Func<Vector2, bool> IsDoor, 
             Func<Vector2, Enums.SpriteDirection, bool> DoorAction) {
 
@@ -61,6 +73,8 @@ namespace GameTests {
 
             } else {
 
+                // This is a delay that allows the player to turn in a direction
+                // without automatically moving in that direction right away.
                 if(Fn.ArrowKeyDown()) {
                     delayedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
                 } else {
