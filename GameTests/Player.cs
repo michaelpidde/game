@@ -19,9 +19,24 @@ namespace GameTests {
         }
 
         public void ResetSprite(Vector2 position, Enums.SpriteDirection direction) {
-            this.sprite.currentPosition = position;
-            this.sprite.spriteDirection = direction;
             delayedMilliseconds = 0;
+            this.sprite.currentPosition = position;
+            this.sprite.lastPosition = position;
+            this.sprite.endPosition = position;
+            this.sprite.spriteDirection = direction;
+        }
+
+        private void PlayerMove(Func<Vector2, bool> IsCollision, Func<Vector2, bool> IsDoor,
+            Func<Vector2, Enums.SpriteDirection, bool> DoorAction) {
+
+            if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
+                DoorAction(sprite.currentPosition, sprite.spriteDirection);
+            }
+
+            if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
+                sprite.moving = true;
+                sprite.endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
+            }
         }
 
         public void Update(GameTime gameTime, Func<Vector2, bool> IsCollision, Func<Vector2, bool> IsDoor, 
@@ -54,48 +69,16 @@ namespace GameTests {
 
                 if(Keyboard.GetState().IsKeyDown(Keys.Down)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.South);
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
-                        DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                    }
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.moving = true;
-                        sprite.endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
-                    }
+                    PlayerMove(IsCollision, IsDoor, DoorAction);
                 } else if(Keyboard.GetState().IsKeyDown(Keys.Right)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.East);
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
-                        DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                    }
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.moving = true;
-                        sprite.endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
-                    }
+                    PlayerMove(IsCollision, IsDoor, DoorAction);
                 } else if(Keyboard.GetState().IsKeyDown(Keys.Left)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.West);
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
-                        DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                    }
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.moving = true;
-                        sprite.endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
-                    }
+                    PlayerMove(IsCollision, IsDoor, DoorAction);
                 } else if(Keyboard.GetState().IsKeyDown(Keys.Up)) {
                     sprite.Update(gameTime, Enums.SpriteDirection.North);
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && IsDoor(sprite.currentPosition)) {
-                        DoorAction(sprite.currentPosition, sprite.spriteDirection);
-                    }
-
-                    if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
-                        sprite.moving = true;
-                        sprite.endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
-                    }
+                    PlayerMove(IsCollision, IsDoor, DoorAction);
                 } else {
                     // Set sprite to idle state
                     sprite.SetIdleState();
