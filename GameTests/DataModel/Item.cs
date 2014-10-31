@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 namespace GameTests.DataModel {
     class Item {
         public Vector2 position { get; set; }
+        public Vector2 offset { get; set; }
         public int itemId { get; set; }
     }
 }

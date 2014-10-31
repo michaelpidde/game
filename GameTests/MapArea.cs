@@ -191,8 +191,8 @@ namespace GameTests.DataModel {
                         spriteBatch.Draw(
                             textureSheet,
                             new Rectangle(
-                                (int)item.position.X * this.tileSize, 
-                                (int)item.position.Y * this.tileSize, 
+                                ((int)item.position.X * this.tileSize) + (int)item.offset.X, 
+                                ((int)item.position.Y * this.tileSize) + (int)item.offset.Y, 
                                 this.tileSize, this.tileSize),
                             new Rectangle(tileX * this.tileSize, tileY * this.tileSize, this.tileSize, this.tileSize),
                             Color.White
