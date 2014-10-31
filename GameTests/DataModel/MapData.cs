@@ -20,6 +20,7 @@ namespace GameTests.DataModel {
         public Vector2 start { get; set; }
         public int direction { get; set; }
         public Door[] doors { get; set; }
+        public Item[] items { get; set; }
 
         public int HasDoorLink(int doorLinkId) {
             for(int i = 0; i <= doors.Length - 1; i++) {

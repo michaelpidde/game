@@ -1,4 +1,4 @@
-﻿{
+{
 	"title": "The Forest",
 	"id": 3,
 	"start": {
@@ -42,6 +42,22 @@
 			"linkId": 1,
 			"loadMapId": 1,
 			"direction": 2
+		}
+	],
+	"items": [
+		{
+			"position": {
+				"X": 4,
+				"Y": 2
+			},
+			"itemId": 0
+		},
+		{
+			"position": {
+				"X": 8,
+				"Y": 4
+			},
+			"itemId": 1
 		}
 	]
 }

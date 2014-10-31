@@ -23,10 +23,11 @@ namespace GameTests {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private Texture2D textureSheet;
+        private Texture2D itemSheet;
         private SpriteFont font;
         private Player player;
         private MapArea mapArea;
-        bool showDebug = true;
+        bool showDebug = false;
 
         public Game1()
             : base() {
@@ -60,6 +61,7 @@ namespace GameTests {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             textureSheet = this.Content.Load<Texture2D>("texturemap_large");
+            itemSheet = this.Content.Load<Texture2D>("items");
             font = this.Content.Load<SpriteFont>("font");
             Texture2D texture = this.Content.Load<Texture2D>("character_move");
             player = new Player(texture, 1, 4, mapArea.mapData.direction, Fn.ScaleVector(mapArea.mapData.start));
@@ -113,6 +115,9 @@ namespace GameTests {
 
                 // Draw collision layer.
                 mapArea.DrawCollision(spriteBatch, textureSheet);
+
+                // Draw items.
+                mapArea.DrawItems(spriteBatch, itemSheet);
 
                 // Draw player on screen.
                 player.Draw(spriteBatch);

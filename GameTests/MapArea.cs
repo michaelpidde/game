@@ -16,6 +16,7 @@ namespace GameTests.DataModel {
         public MapData mapData { get; set; }
         public bool[][] collisionArray { get; set; }
         public int[][] doorArray { get; set; }
+        public int[][] itemArray { get; set; }
         private int mapId = 1;
         private int doorLinkId = -1;
         private bool reloadingMap = false;
@@ -57,7 +58,7 @@ namespace GameTests.DataModel {
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.Converters.Add(new Vector2Convertor());
 
-            //string unencoded = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+            //unencoded = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
             return JsonConvert.DeserializeObject<MapData>(unencoded, settings);
         }
 
@@ -67,6 +68,7 @@ namespace GameTests.DataModel {
             this.width = mapData.map[0].Length - 1;
             this.collisionArray = GetCollisionArray();
             this.doorArray = GetDoorArray();
+            this.itemArray = GetItemArray();
             this.reloadingMap = false;
             this.doCallback = true;
         }
@@ -131,6 +133,15 @@ namespace GameTests.DataModel {
             return doorArray;
         }
 
+        private int[][] GetItemArray() {
+            Item[] itemMap = this.mapData.items;
+            int[][] itemArray = GetEmptyMapArray();
+            for(int item = 0; item < itemMap.Length; item++) {
+                itemArray[(int)itemMap[item].position.Y][(int)itemMap[item].position.X] = item;
+            }
+            return itemArray;
+        }
+
         public int[][] GetEmptyMapArray() {
             int[][] map = this.mapData.map;
             int[][] emptyArray = new int[map.Length][];
@@ -153,6 +164,43 @@ namespace GameTests.DataModel {
 
         public void DrawCollision(SpriteBatch spriteBatch, Texture2D textureSheet) {
             Draw(this.mapData.collision, spriteBatch, textureSheet);
+        }
+
+        public void DrawItems(SpriteBatch spriteBatch, Texture2D textureSheet) {
+            DrawItems(this.itemArray, spriteBatch, textureSheet);
+        }
+
+        private void DrawItems(int[][] itemArray, SpriteBatch spriteBatch, Texture2D textureSheet) {
+            int sheetWidth = textureSheet.Width / this.tileSize;
+            int itemId = -1;
+            int tileY = 0;
+            int tileX = 0;
+            double tilePositionPrecision = 0;
+
+            spriteBatch.Begin();
+            for(int y = 0; y <= this.height; y++) {
+                for(int x = 0; x <= this.width; x++) {
+                    itemId = itemArray[y][x];
+                    if(itemId > -1) {
+                        Item item = this.mapData.items[itemId];
+
+                        tilePositionPrecision = (double)item.itemId / (double)sheetWidth;
+                        tileY = (int)tilePositionPrecision;
+                        tileX = (int)((tilePositionPrecision - (int)tilePositionPrecision) * sheetWidth);
+
+                        spriteBatch.Draw(
+                            textureSheet,
+                            new Rectangle(
+                                (int)item.position.X * this.tileSize, 
+                                (int)item.position.Y * this.tileSize, 
+                                this.tileSize, this.tileSize),
+                            new Rectangle(tileX * this.tileSize, tileY * this.tileSize, this.tileSize, this.tileSize),
+                            Color.White
+                        );
+                    }
+                }
+            }
+            spriteBatch.End();
         }
 
         private void Draw(int[][] map, SpriteBatch spriteBatch, Texture2D textureSheet) {

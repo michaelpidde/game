@@ -34,5 +34,21 @@
 			"loadMapId": 1,
 			"direction": 0
 		}
+	],
+	"items": [
+		{
+			"position": {
+				"X": 2,
+				"Y": 1
+			},
+			"itemId": 0
+		},
+		{
+			"position": {
+				"X": 3,
+				"Y": 1
+			},
+			"itemId": 1
+		}
 	]
 }
