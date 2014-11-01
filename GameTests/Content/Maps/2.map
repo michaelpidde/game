@@ -57,6 +57,28 @@
 				"Y": -6
 			},
 			"itemId": 1
+		},
+		{
+			"position": {
+				"X": 4,
+				"Y": 1
+			},
+			"offset": {
+				"X": 0,
+				"Y": -6
+			},
+			"itemId": 1
+		},
+		{
+			"position": {
+				"X": 1,
+				"Y": 1
+			},
+			"offset": {
+				"X": 0,
+				"Y": -4
+			},
+			"itemId": 2
 		}
 	]
 }
