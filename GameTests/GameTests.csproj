@@ -137,6 +137,9 @@
     <Content Include="Content\Maps\2.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\Maps\4.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Maps\3.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
