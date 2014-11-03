@@ -17,8 +17,9 @@ namespace GameTests.DataModel {
         public bool[][] collisionArray { get; set; }
         public int[][] doorArray { get; set; }
         public int[][] itemArray { get; set; }
-        private int mapId = 1;
+        private int mapId = 2;
         private int doorLinkId = -1;
+        private Vector2 offset;
         private bool reloadingMap = false;
         private bool doCallback = false;
 
@@ -34,6 +35,10 @@ namespace GameTests.DataModel {
             this.doCallback = false;
         }
 
+        public void SetOffset(Vector2 offset) {
+            this.offset = offset;
+        }
+
         public Vector2 GetDoorPosition() {
             Vector2 position = this.mapData.start;
             int doorId = this.mapData.HasDoorLink(this.doorLinkId);
@@ -43,8 +48,9 @@ namespace GameTests.DataModel {
             return position;
         }
 
-        public MapArea(int tileSize) {
+        public MapArea(int tileSize, Vector2 offset) {
             this.tileSize = tileSize;
+            this.offset = offset;
             ReloadMap();
         }
 
@@ -191,8 +197,8 @@ namespace GameTests.DataModel {
                         spriteBatch.Draw(
                             textureSheet,
                             new Rectangle(
-                                ((int)item.position.X * this.tileSize) + (int)item.offset.X, 
-                                ((int)item.position.Y * this.tileSize) + (int)item.offset.Y, 
+                                ((int)item.position.X * this.tileSize) + (int)item.offset.X + (int)this.offset.X, 
+                                ((int)item.position.Y * this.tileSize) + (int)item.offset.Y + (int)this.offset.Y, 
                                 this.tileSize, this.tileSize),
                             new Rectangle(tileX * this.tileSize, tileY * this.tileSize, this.tileSize, this.tileSize),
                             Color.White
@@ -221,7 +227,11 @@ namespace GameTests.DataModel {
 
                         spriteBatch.Draw(
                             textureSheet,
-                            new Rectangle(x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize),
+                            new Rectangle(
+                                (x * this.tileSize) + (int)this.offset.X, 
+                                (y * this.tileSize) + (int)this.offset.Y, 
+                                this.tileSize, this.tileSize
+                            ),
                             new Rectangle(tileX * this.tileSize, tileY * this.tileSize, this.tileSize, this.tileSize),
                             Color.White
                         );

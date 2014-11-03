@@ -27,7 +27,10 @@ namespace GameTests {
         private SpriteFont font;
         private Player player;
         private MapArea mapArea;
-        bool showDebug = false;
+        bool showDebug = true;
+
+        // Used to center the map in the window.
+        public Vector2 offset;
 
         public Game1()
             : base() {
@@ -48,9 +51,30 @@ namespace GameTests {
             graphics.ApplyChanges();
 
             // Load initial map.
-            mapArea = new MapArea(Fn.TILESIZE);
+            mapArea = new MapArea(Fn.TILESIZE, offset);
+
+            // Set offset.
+            offset = GetOffset(mapArea.height, mapArea.width, 
+                graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
 
             base.Initialize();
+        }
+
+        /// <summary>
+        /// This function sets an offset vector that is used to center the
+        /// current map in the middle of the window.
+        /// </summary>
+        private Vector2 GetOffset(int mapHeight, int mapWidth, int bufferHeight, int bufferWidth) {
+            Vector2 offset = new Vector2(0, 0);
+
+            if((mapWidth * Fn.TILESIZE) != bufferWidth) {
+                offset.X = (bufferWidth - (mapWidth * Fn.TILESIZE)) / 2;
+            }
+            if((mapHeight * Fn.TILESIZE) != bufferHeight) {
+                offset.Y = (bufferHeight - (mapHeight * Fn.TILESIZE)) / 2;
+            }
+
+            return offset;
         }
 
         /// <summary>
@@ -64,7 +88,7 @@ namespace GameTests {
             itemSheet = this.Content.Load<Texture2D>("items");
             font = this.Content.Load<SpriteFont>("font");
             Texture2D texture = this.Content.Load<Texture2D>("character_move");
-            player = new Player(texture, 1, 4, mapArea.mapData.direction, Fn.ScaleVector(mapArea.mapData.start));
+            player = new Player(texture, 1, 4, mapArea.mapData.direction, Fn.ScaleVector(mapArea.mapData.start), offset);
         }
 
         /// <summary>
@@ -89,8 +113,10 @@ namespace GameTests {
             if(!mapArea.ReloadingMap()) {
                 if(mapArea.Callback()) {
                     // This condition will happen after a new map is loaded.
+                    this.offset = GetOffset(mapArea.height, mapArea.width, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
+                    mapArea.SetOffset(this.offset);
                     // We'll need to reset the player position to the door position.
-                    player.ResetSprite(Fn.ScaleVector(mapArea.GetDoorPosition()), Enums.GetDirectionKey(mapArea.mapData.direction));
+                    player.ResetSprite(Fn.ScaleVector(mapArea.GetDoorPosition()), Enums.GetDirectionKey(mapArea.mapData.direction), this.offset);
                     mapArea.VoidCallback();
                 }
                 player.Update(gameTime, mapArea.IsCollision, mapArea.IsDoor, mapArea.DoorAction);
@@ -128,6 +154,7 @@ namespace GameTests {
                     string stats = "Map: " + mapArea.mapData.title;
                     stats += "\nHeight: " + mapArea.height;
                     stats += "\nWidth: " + mapArea.width;
+                    stats += "\nOffset: " + offset.ToString();
                     stats += player.WriteDebug();
                     stats += mapArea.WriteDebug();
                     spriteBatch.DrawString(font, stats, new Vector2(10, 10), Color.White);

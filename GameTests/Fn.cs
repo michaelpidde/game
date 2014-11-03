@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework.Input;
 namespace GameTests {
     static class Fn {
         public const int TILESIZE = 32;
-        public const int X_TILES = 22;
-        public const int Y_TILES = 14;
+        public const int X_TILES = 25;
+        public const int Y_TILES = 17;
         public const int MOVE_DELAY = 200;
 
         public static Vector2 ScaleVector(Vector2 vector) {
@@ -46,6 +46,12 @@ namespace GameTests {
                 return true;
             }
             return false;
+        }
+
+        public static Vector2 OffsetVector(Vector2 position, Vector2 offset) {
+            position.X += offset.X;
+            position.Y += offset.Y;
+            return position;
         }
     }
 }

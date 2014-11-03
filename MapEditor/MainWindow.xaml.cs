@@ -21,30 +21,12 @@ namespace MapEditor {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private string encryptFilename = "";
         
         public MainWindow() {
             InitializeComponent();
         }
 
-        private void openFile() {
-            try {
-                OpenFileDialog dialog = new OpenFileDialog();
-                dialog.DefaultExt = ".map";
-                dialog.Filter = "Map documents (.map)|*.map";
-                Nullable<bool> result = dialog.ShowDialog();
-                if(result == true) {
-                    this.encryptFilename = dialog.FileName;
-                    txtFilename.Text = this.encryptFilename;
-                    txtFilename.ScrollToEnd();
-                }
-            } catch(Exception e) {
-                Console.Write(e.ToString());
-                // Add error handling...
-            }
-        }
-
-        private string readFile(string filename) {
+        private string ReadFile(string filename) {
             try {
                 using(StreamReader reader = new StreamReader(filename)) {
                     return reader.ReadToEnd();
@@ -56,7 +38,7 @@ namespace MapEditor {
             }
         }
 
-        private void writeFile(string filename, string content) {
+        private void WriteFile(string filename, string content) {
             try {
                 using(StreamWriter writer = new StreamWriter(filename)) {
                     writer.Write(content);
@@ -67,28 +49,14 @@ namespace MapEditor {
             }
         }
 
-        private void btnSelectFile_Click(object sender, RoutedEventArgs e) {
-            openFile();
+        private void LoadTextureSheet() {
+            Image textureSheet = new Image();
+            BitmapImage source = new BitmapImage("")
         }
 
-        private void txtFilename_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            if(this.encryptFilename == "") {
-                openFile();
-            }
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+
         }
 
-        private void btnEncrypt_Click(object sender, RoutedEventArgs e) {
-            string contents = readFile(this.encryptFilename);
-            // Check if file is JSON. If not, don't try to encrypt it since it might be already.
-            // Do better validation later: http://james.newtonking.com/json/help/index.html
-            if(contents.ElementAt(0) == '{') {
-                contents = Convert.ToBase64String(Encoding.UTF8.GetBytes(contents));
-                writeFile(this.encryptFilename, contents);
-                lblEncryptStatus.Content = "Done.";
-                this.encryptFilename = "";
-                txtFilename.Text = "";
-            }
-            
-        }
     }
 }

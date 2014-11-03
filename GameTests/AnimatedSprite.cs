@@ -16,6 +16,7 @@ namespace GameTests {
         public Vector2 lastPosition { get; set; }
         public Vector2 currentPosition { get; set; }
         public Vector2 endPosition { get; set; }
+        public Vector2 offset { get; set; }
         private int currentFrame;
         private int totalFrames;
         private int timeSinceLastFrame;
@@ -23,7 +24,9 @@ namespace GameTests {
         public bool moving = false;
         public Enums.SpriteDirection spriteDirection { get; set; }
 
-        public AnimatedSprite(Texture2D texture, int rows, int columns, int spriteDirection, Vector2 position, int animateSpeed, int moveTime) {
+        public AnimatedSprite(Texture2D texture, int rows, int columns, int spriteDirection, Vector2 position, 
+            int animateSpeed, int moveTime, Vector2 offset) {
+
             this.texture = texture;
             this.rows = rows;
             this.columns = columns;
@@ -32,6 +35,7 @@ namespace GameTests {
             this.currentPosition = position;
             this.animateSpeed = animateSpeed;
             this.moveTime = moveTime;
+            this.offset = offset;
 
             this.currentFrame = 0;
             this.totalFrames = rows * columns;
@@ -58,7 +62,12 @@ namespace GameTests {
             int column = currentFrame % columns;
 
             Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
+            Vector2 offsetVector = Fn.OffsetVector(location, offset);
+            Rectangle destinationRectangle = new Rectangle(
+                (int)offsetVector.X, 
+                (int)offsetVector.Y, 
+                width, height
+            );
 
             spriteBatch.Begin();
             spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, Color.White);

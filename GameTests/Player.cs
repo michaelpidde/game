@@ -10,20 +10,23 @@ using GameTests.DataModel;
 namespace GameTests {
     class Player {
         private AnimatedSprite sprite { get; set; }
+        private Vector2 offset;
         private int delayedMilliseconds = 0;
 
-        public Player(Texture2D texture, int rows, int columns, int spriteDirection, Vector2 position) {
+        public Player(Texture2D texture, int rows, int columns, int spriteDirection, Vector2 position, Vector2 offset) {
             int animateSpeed = 150;
             int moveTime = 300;
-            this.sprite = new AnimatedSprite(texture, rows, columns, spriteDirection, position, animateSpeed, moveTime);
+            this.offset = offset;
+            this.sprite = new AnimatedSprite(texture, rows, columns, spriteDirection, position, animateSpeed, moveTime, offset);
         }
 
-        public void ResetSprite(Vector2 position, Enums.SpriteDirection direction) {
+        public void ResetSprite(Vector2 position, Enums.SpriteDirection direction, Vector2 offset) {
             delayedMilliseconds = 0;
             this.sprite.currentPosition = position;
             this.sprite.lastPosition = position;
             this.sprite.endPosition = position;
             this.sprite.spriteDirection = direction;
+            this.offset = offset;
         }
 
         /*
@@ -39,7 +42,8 @@ namespace GameTests {
 
             if(delayedMilliseconds > Fn.MOVE_DELAY && !IsCollision(sprite.currentPosition)) {
                 sprite.moving = true;
-                sprite.endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
+                Vector2 endPosition = Fn.ScaleVector(Fn.GetNextPosition(sprite.currentPosition));
+                sprite.endPosition = Fn.OffsetVector(endPosition, offset);
             }
         }
 
