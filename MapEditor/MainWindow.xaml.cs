@@ -116,15 +116,17 @@ namespace MapEditor {
 
         private void mnuLoadTextures_Click(object sender, RoutedEventArgs e) {
             this.textureMap = selectFile("texture");
-            Image[][] images = sliceImage(this.textureMap);
-            
-            for(int y = 0; y < images.Length; y++) {
-                for(int x = 0; x < images[0].Length; x++) {
-                    pnlTextures.Children.Add(images[y][x]);
-                }
-            }
+            if(this.textureMap.Length > 0){
+                Image[][] images = sliceImage(this.textureMap);
 
-            pnlTextures.Height = images.Length * pnlTextures.ItemHeight;
+                for (int y = 0; y < images.Length; y++){
+                    for (int x = 0; x < images[0].Length; x++) {
+                        pnlTextures.Children.Add(images[y][x]);
+                    }
+                }
+
+                pnlTextures.Height = images.Length * pnlTextures.ItemHeight;
+            }
         }
 
         private void mnuLoadItems_Click(object sender, RoutedEventArgs e) {
