@@ -1,13 +1,17 @@
 ﻿<Window x:Class="MapEditor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Map Editor" Height="350" Width="525">
+        Title="Map Editor" Height="600" Width="800" ResizeMode="CanMinimize">
     <Grid>
-        <Label Content="Encrypt Map File:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100"/>
-        <Button x:Name="btnSelectFile" Content="Select" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.173,0.543" Click="btnSelectFile_Click"/>
-        <TextBox x:Name="txtFilename" HorizontalAlignment="Left" Height="23" Margin="115,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="312" PreviewMouseDown="txtFilename_PreviewMouseDown"/>
-        <Button x:Name="btnEncrypt" Content="Encrypt" HorizontalAlignment="Left" Margin="432,37,0,0" VerticalAlignment="Top" Width="75" Click="btnEncrypt_Click"/>
         <Label x:Name="lblEncryptStatus" Content="" HorizontalAlignment="Left" Margin="432,64,0,0" VerticalAlignment="Top"/>
+        <Menu Height="25" VerticalAlignment="Top" Width="792" HorizontalAlignment="Left">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="mnuLoadTextures" Header="Load _Textures" Click="mnuLoadTextures_Click"/>
+                <MenuItem x:Name="mnuLoadItems" Header="Load _Items" Click="mnuLoadItems_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Edit"/>
+        </Menu>
+        <WrapPanel x:Name="pnlTextures" HorizontalAlignment="Left" Height="231" Margin="0,25,0,0" VerticalAlignment="Top" Width="272" Background="#FFECECEC" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ItemHeight="34" ItemWidth="34" MaxWidth="272"/>
 
     </Grid>
 </Window>
