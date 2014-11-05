@@ -124,6 +124,7 @@ namespace MapEditor {
                 }
             }
 
+            pnlTextures.Height = images.Length * pnlTextures.ItemHeight;
         }
 
         private void mnuLoadItems_Click(object sender, RoutedEventArgs e) {

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Map Editor" Height="600" Width="800" ResizeMode="CanMinimize">
     <Grid>
-        <Label x:Name="lblEncryptStatus" Content="" HorizontalAlignment="Left" Margin="432,64,0,0" VerticalAlignment="Top"/>
         <Menu Height="25" VerticalAlignment="Top" Width="792" HorizontalAlignment="Left">
             <MenuItem Header="_File">
                 <MenuItem x:Name="mnuLoadTextures" Header="Load _Textures" Click="mnuLoadTextures_Click"/>
@@ -11,7 +10,10 @@
             </MenuItem>
             <MenuItem Header="_Edit"/>
         </Menu>
-        <WrapPanel x:Name="pnlTextures" HorizontalAlignment="Left" Height="231" Margin="0,25,0,0" VerticalAlignment="Top" Width="272" Background="#FFECECEC" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ItemHeight="34" ItemWidth="34" MaxWidth="272"/>
-
+        <DockPanel x:Name="pnlLeft" Margin="0,25,0,0" Width="290" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Visible" Background="#FFECECEC">
+            <ScrollViewer Width="290" HorizontalAlignment="Left">
+                <WrapPanel x:Name="pnlTextures" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="272" Background="#FFECECEC" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ItemHeight="34" ItemWidth="34" MaxWidth="272"/>
+            </ScrollViewer>
+        </DockPanel>
     </Grid>
 </Window>
