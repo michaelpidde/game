@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
-using Newtonsoft.Json.Schema;
+using Newtonsoft.Json;
+using Common.DataModel;
 
 namespace MapEditor {
     /// <summary>
@@ -25,6 +27,7 @@ namespace MapEditor {
         private string textureMap = "";
         private string itemMap = "";
         private string map = "";
+        private MapData mapData;
         
         public MainWindow() {
             InitializeComponent();
@@ -115,9 +118,58 @@ namespace MapEditor {
             return slices;
         }
 
+        private void setDataGrid() {
+            ObservableCollection<MapCell> tiles = new ObservableCollection<MapCell>();
+            int[][] doors = getDoorMap();
+            int[][] items = getItemMap();
+            for(int y = 0; y < mapData.map.Length; y++) {
+                for(int x = 0; x < mapData.map[0].Length; x++) {
+                    MapCell cell = new MapCell();
+                    cell.layer1 = mapData.map[y][x];
+                    cell.layer2 = mapData.map2[y][x];
+                    cell.collision = mapData.collision[y][x];
+                    cell.door = doors[y][x];
+                    cell.item = items[y][x];
+                    tiles.Add(cell);
+                }
+            }
+            tab1_grid.ColumnWidth = 34;
+            tab1_grid.RowHeight = 34;
+            tab1_grid.ItemsSource = tiles;
+        }
+
+        private int[][] getDoorMap() {
+            int[][] doors = getEmptyMapArray();
+            foreach(Door door in mapData.doors) {
+                doors[(int)door.position.Y][(int)door.position.X] = door.linkId;
+            }
+            return doors;
+        }
+
+        private int[][] getItemMap() {
+            int[][] items = getEmptyMapArray();
+            foreach(Item item in mapData.items) {
+                items[(int)item.position.Y][(int)item.position.X] = item.itemId;
+            }
+            return items;
+        }
+
+        private int[][] getEmptyMapArray() {
+            int[][] map = this.mapData.map;
+            int[][] emptyArray = new int[map.Length][];
+            for(int y = 0; y < map.Length; y++) {
+                emptyArray[y] = new int[map[0].Length];
+                for(int x = 0; x < map[0].Length; x++) {
+                    emptyArray[y][x] = -1;
+                }
+            }
+            return emptyArray;
+        }
+
         private void mnuLoadTextures_Click(object sender, RoutedEventArgs e) {
             this.textureMap = selectFile("texture");
             if(this.textureMap.Length > 0){
+                pnlTextures.Children.Clear();
                 Image[][] images = sliceImage(this.textureMap);
 
                 for (int y = 0; y < images.Length; y++){
@@ -133,6 +185,7 @@ namespace MapEditor {
         private void mnuLoadItems_Click(object sender, RoutedEventArgs e) {
             this.itemMap = selectFile("texture");
             if(this.itemMap.Length > 0) {
+                pnlItems.Children.Clear();
                 Image[][] images = sliceImage(this.itemMap);
 
                 for(int y = 0; y < images.Length; y++) {
@@ -149,7 +202,10 @@ namespace MapEditor {
             this.map = selectFile("map");
             if(this.map.Length > 0) {
                 string json = readFile(this.map);
-
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                settings.Converters.Add(new Vector2Convertor());
+                this.mapData =  JsonConvert.DeserializeObject<MapData>(json, settings);
+                setDataGrid();
             }
         }
     }
