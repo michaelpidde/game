@@ -24,6 +24,7 @@ namespace MapEditor {
         private const int TILESIZE = 32;
         private string textureMap = "";
         private string itemMap = "";
+        private string map = "";
         
         public MainWindow() {
             InitializeComponent();
@@ -131,6 +132,25 @@ namespace MapEditor {
 
         private void mnuLoadItems_Click(object sender, RoutedEventArgs e) {
             this.itemMap = selectFile("texture");
+            if(this.itemMap.Length > 0) {
+                Image[][] images = sliceImage(this.itemMap);
+
+                for(int y = 0; y < images.Length; y++) {
+                    for(int x = 0; x < images[0].Length; x++) {
+                        pnlItems.Children.Add(images[y][x]);
+                    }
+                }
+
+                pnlItems.Height = images.Length * pnlItems.ItemHeight;
+            }
+        }
+
+        private void mnuLoadMap_Click(object sender, RoutedEventArgs e) {
+            this.map = selectFile("map");
+            if(this.map.Length > 0) {
+                string json = readFile(this.map);
+
+            }
         }
     }
 }

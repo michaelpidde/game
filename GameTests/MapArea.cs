@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Common.DataModel;
 
-namespace GameTests.DataModel {
+namespace GameTests {
     class MapArea {
         public int tileSize { get; set; }
         public int height { get; set; }

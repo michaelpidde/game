@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameTests.DataModel {
+namespace Common.DataModel {
     public static class Enums {
         public enum SpriteDirection {
             North = 3,

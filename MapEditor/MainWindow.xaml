@@ -1,19 +1,35 @@
 ﻿<Window x:Class="MapEditor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Map Editor" Height="600" Width="800" ResizeMode="CanMinimize">
+        Title="Map Editor" Height="600" Width="1000" ResizeMode="CanMinimize">
     <Grid>
-        <Menu Height="25" VerticalAlignment="Top" Width="792" HorizontalAlignment="Left">
+        <Menu Height="25" VerticalAlignment="Top" Width="994" HorizontalAlignment="Left">
             <MenuItem Header="_File">
                 <MenuItem x:Name="mnuLoadTextures" Header="Load _Textures" Click="mnuLoadTextures_Click"/>
                 <MenuItem x:Name="mnuLoadItems" Header="Load _Items" Click="mnuLoadItems_Click"/>
+                <MenuItem x:Name="mnuLoadMap" Header="Load _Map File" Click="mnuLoadMap_Click"/>
             </MenuItem>
             <MenuItem Header="_Edit"/>
         </Menu>
-        <DockPanel x:Name="pnlLeft" Margin="0,25,0,0" Width="290" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Visible" Background="#FFECECEC">
+        <DockPanel x:Name="pnlLeftTextures" Margin="0,25,0,0" Width="290" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Visible" Background="#FFECECEC">
             <ScrollViewer Width="290" HorizontalAlignment="Left">
                 <WrapPanel x:Name="pnlTextures" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="272" Background="#FFECECEC" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ItemHeight="34" ItemWidth="34" MaxWidth="272"/>
             </ScrollViewer>
         </DockPanel>
+        <DockPanel x:Name="pnlLeftItems" Margin="0,330,0,0" Width="290" Height="232" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Visible" Background="#FFECECEC">
+            <ScrollViewer Width="290" HorizontalAlignment="Left">
+                <WrapPanel x:Name="pnlItems" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="272" Background="#FFECECEC" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ItemHeight="34" ItemWidth="34" MaxWidth="272"/>
+            </ScrollViewer>
+        </DockPanel>
+        <TabControl HorizontalAlignment="Left" Height="300" Margin="295,25,0,0" VerticalAlignment="Top" Width="689">
+            <TabItem x:Name="tab1" Header="Tab">
+                <Grid Background="#FFE5E5E5">
+                    <ScrollViewer HorizontalAlignment="Left" Height="268" VerticalAlignment="Top" Width="679">
+                        <DataGrid x:Name="tab1_grid" />
+                    </ScrollViewer>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

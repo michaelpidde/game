@@ -6,12 +6,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.Xna.Framework;
 
-namespace GameTests.DataModel {
+namespace Common.DataModel {
     /// <summary>
     /// Gleaned from:
     /// http://stackoverflow.com/questions/10200047/deserialize-json-data-generated-by-different-json-net-lib
     /// </summary>
-    class Vector2Convertor : JsonConverter {
+    public class Vector2Convertor : JsonConverter {
         public override bool CanConvert(Type objectType) {
             return (objectType == typeof(Vector2));
         }
